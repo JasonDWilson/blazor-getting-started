@@ -22,14 +22,14 @@ namespace BethanysPieShowHRM.App.Services
         public async Task<IEnumerable<Employee>> GetAllEmployees()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<Employee>>(
-                await _httpClient.GetStreamAsync($"api/employee"),
+                await _httpClient.GetStreamAsync(string.Empty),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<Employee> GetEmployeeDetails(int employeeId)
         {
             return await JsonSerializer.DeserializeAsync<Employee>(
-                await _httpClient.GetStreamAsync($"api/employee/{employeeId}"),
+                await _httpClient.GetStreamAsync($"{employeeId}"),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
