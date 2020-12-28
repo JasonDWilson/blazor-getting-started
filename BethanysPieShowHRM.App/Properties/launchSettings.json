@@ -16,7 +16,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "BethanysPieShowHRM.App": {
+    "BethanysPieShopHRM.App": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

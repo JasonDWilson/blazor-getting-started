@@ -1,12 +1,12 @@
-﻿using BethanysPieShopHRM.Shared;
-using BethanysPieShowHRM.App.Services;
+﻿using BethanysPieShopHRM.App.Services;
+using BethanysPieShopHRM.Shared;
 using Microsoft.AspNetCore.Components;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BethanysPieShowHRM.App.Pages
+namespace BethanysPieShopHRM.App.Pages
 {
     public partial class EmployeeOverview
     {
@@ -17,7 +17,7 @@ namespace BethanysPieShowHRM.App.Pages
 
         private List<JobCategory> JobCategories { get; set; }
 
-        protected async override Task OnInitializedAsync() { Employees = await _employeeDataService.GetAllEmployees(); }
+        protected async override Task OnInitializedAsync() { Employees = await _employeeDataService.GetAllEmployeesAsync(); }
 
         public IEnumerable<Employee> Employees { get; set; }
     }

@@ -6,7 +6,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BethanysPieShowHRM.App.Services
+namespace BethanysPieShopHRM.App.Services
 {
     public class JobCategoryDataService : IJobCategoryDataService
     {

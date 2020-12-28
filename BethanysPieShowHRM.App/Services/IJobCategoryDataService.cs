@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BethanysPieShowHRM.App.Services
+namespace BethanysPieShopHRM.App.Services
 {
     public interface IJobCategoryDataService
     {

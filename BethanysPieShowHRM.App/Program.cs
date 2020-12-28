@@ -1,10 +1,10 @@
-using BethanysPieShowHRM.App.Services;
+using BethanysPieShopHRM.App.Services;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Threading.Tasks;
 
-namespace BethanysPieShowHRM.App
+namespace BethanysPieShopHRM.App
 {
     public class Program
     {
