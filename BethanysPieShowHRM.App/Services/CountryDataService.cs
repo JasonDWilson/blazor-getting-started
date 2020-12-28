@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -13,10 +12,10 @@ namespace BethanysPieShowHRM.App.Services
     {
         private readonly HttpClient _httpClient;
 
-        public CountryDataService(HttpClient client) =>
-            _httpClient = client ?? throw new ArgumentNullException(nameof(client));
+        public CountryDataService(HttpClient client) => _httpClient =
+            client ?? throw new ArgumentNullException(nameof(client));
 
-        public async Task<IEnumerable<Country>> GetCountries()
+        public async Task<IEnumerable<Country>> GetCountriesAsync()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<Country>>(
                 await _httpClient.GetStreamAsync(string.Empty),
@@ -24,12 +23,11 @@ namespace BethanysPieShowHRM.App.Services
         }
 
 
-        public async Task<Country> GetCountry(int countryId)
+        public async Task<Country> GetCountryAsync(int countryId)
         {
             return await JsonSerializer.DeserializeAsync<Country>(
                 await _httpClient.GetStreamAsync($"{countryId}"),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
-
     }
 }

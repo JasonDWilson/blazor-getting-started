@@ -15,24 +15,24 @@ namespace BethanysPieShowHRM.App.Services
         public EmployeeDataService(HttpClient client)
         { _httpClient = client ?? throw new ArgumentNullException(nameof(client)); }
 
-        public Task<Employee> AddEmployee(Employee employee) { throw new NotImplementedException(); }
+        public Task<Employee> AddEmployeeAsync(Employee employee) { throw new NotImplementedException(); }
 
-        public Task DeleteEmployee(int employeeId) { throw new NotImplementedException(); }
+        public Task DeleteEmployeeAsync(int employeeId) { throw new NotImplementedException(); }
 
-        public async Task<IEnumerable<Employee>> GetAllEmployees()
+        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
         {
             return await JsonSerializer.DeserializeAsync<IEnumerable<Employee>>(
                 await _httpClient.GetStreamAsync(string.Empty),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        public async Task<Employee> GetEmployeeDetails(int employeeId)
+        public async Task<Employee> GetEmployeeDetailsAsync(int employeeId)
         {
             return await JsonSerializer.DeserializeAsync<Employee>(
                 await _httpClient.GetStreamAsync($"{employeeId}"),
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
         }
 
-        public Task UpdateEmployee(Employee employee) { throw new NotImplementedException(); }
+        public Task UpdateEmployeeAsync(Employee employee) { throw new NotImplementedException(); }
     }
 }

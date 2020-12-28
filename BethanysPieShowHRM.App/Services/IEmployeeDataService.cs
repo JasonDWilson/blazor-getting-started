@@ -9,10 +9,10 @@ namespace BethanysPieShowHRM.App.Services
 {
     public interface IEmployeeDataService
     {
-        Task<Employee> AddEmployee(Employee employee);
-        Task DeleteEmployee(int employeeId);
-        Task<IEnumerable<Employee>> GetAllEmployees();
-        Task<Employee> GetEmployeeDetails(int employeeId);
-        Task UpdateEmployee(Employee employee);
+        Task<Employee> AddEmployeeAsync(Employee employee);
+        Task DeleteEmployeeAsync(int employeeId);
+        Task<IEnumerable<Employee>> GetAllEmployeesAsync();
+        Task<Employee> GetEmployeeDetailsAsync(int employeeId);
+        Task UpdateEmployeeAsync(Employee employee);
     }
 }
