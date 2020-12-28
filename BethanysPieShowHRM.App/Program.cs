@@ -12,7 +12,10 @@ namespace BethanysPieShowHRM.App
         {
             builder.Services
                 .AddHttpClient<IEmployeeDataService, EmployeeDataService>(
-                    client => client.BaseAddress = new Uri("https://localhost:44340/"));
+                    client => client.BaseAddress = new Uri("https://localhost:44340/api/employee/"));
+            builder.Services
+                .AddHttpClient<ICountryDataService, CountryDataService>(
+                    client => client.BaseAddress = new Uri("https://localhost:44340/api/country/"));
         }
 
         public static async Task Main(string[] args)
