@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -10,29 +11,53 @@ namespace BethanysPieShopHRM.App.Services
 {
     public class EmployeeDataService : IEmployeeDataService
     {
-        private HttpClient _httpClient;
+        private readonly HttpClient _httpClient;
 
-        public EmployeeDataService(HttpClient client)
-        { _httpClient = client ?? throw new ArgumentNullException(nameof(client)); }
-
-        public Task<Employee> AddEmployeeAsync(Employee employee) { throw new NotImplementedException(); }
-
-        public Task DeleteEmployeeAsync(int employeeId) { throw new NotImplementedException(); }
-
-        public async Task<IEnumerable<Employee>> GetAllEmployeesAsync()
+        public EmployeeDataService(HttpClient httpClient)
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<Employee>>(
-                await _httpClient.GetStreamAsync(string.Empty),
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            _httpClient = httpClient;
         }
 
-        public async Task<Employee> GetEmployeeDetailsAsync(int employeeId)
+        public async Task<Employee> AddEmployee(Employee employee)
         {
-            return await JsonSerializer.DeserializeAsync<Employee>(
-                await _httpClient.GetStreamAsync($"{employeeId}"),
-                new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var employeeJson =
+                new StringContent(JsonSerializer.Serialize(employee), Encoding.UTF8, "application/json");
+
+            var response = await _httpClient.PostAsync("api/employee", employeeJson);
+
+            if (response.IsSuccessStatusCode)
+            {
+                return await JsonSerializer.DeserializeAsync<Employee>(await response.Content.ReadAsStreamAsync());
+            }
+
+            return null;
         }
 
-        public Task UpdateEmployeeAsync(Employee employee) { throw new NotImplementedException(); }
+        public async Task DeleteEmployee(int employeeId)
+        {
+            await _httpClient.DeleteAsync($"api/employee/{employeeId}");
+        }
+
+        public async Task<IEnumerable<Employee>> GetAllEmployees()
+        {
+            return await JsonSerializer.DeserializeAsync<IEnumerable<Employee>>
+                    (await _httpClient.GetStreamAsync($"api/employee"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+
+        public async Task<Employee> GetEmployeeDetails(int employeeId)
+        {
+            return await JsonSerializer.DeserializeAsync<Employee>
+                (await _httpClient.GetStreamAsync($"api/employee/{employeeId}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+        }
+
+        public async Task UpdateEmployee(Employee employee)
+        {
+            var employeeJson =
+                new StringContent(JsonSerializer.Serialize(employee), Encoding.UTF8, "application/json");
+
+            await _httpClient.PutAsync("api/employee", employeeJson);
+        }
+
+
     }
 }

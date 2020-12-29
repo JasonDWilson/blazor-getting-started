@@ -18,7 +18,7 @@ namespace BethanysPieShopHRM.App.Pages
         private List<JobCategory> JobCategories { get; set; }
 
         protected async override Task OnInitializedAsync()
-        { Employee = await _employeeDataService.GetEmployeeDetailsAsync(int.Parse(EmployeeId)); }
+        { Employee = await _employeeDataService.GetEmployeeDetails(int.Parse(EmployeeId)); }
 
         public Employee Employee { get; set; } = new Employee();
 

@@ -8,14 +8,17 @@ namespace BethanysPieShopHRM.App
 {
     public class Program
     {
-        private static async Task registerServices(WebAssemblyHostBuilder builder)
+        private static void registerServices(IServiceCollection services)
         {
-            builder.Services
+            services
                 .AddHttpClient<IEmployeeDataService, EmployeeDataService>(
-                    client => client.BaseAddress = new Uri("https://localhost:44340/api/employee/"));
-            builder.Services
+                    client => client.BaseAddress = new Uri("https://localhost:44340/"));
+            services
                 .AddHttpClient<ICountryDataService, CountryDataService>(
                     client => client.BaseAddress = new Uri("https://localhost:44340/api/country/"));
+            services
+                .AddHttpClient<IJobCategoryDataService, JobCategoryDataService>(
+                    client => client.BaseAddress = new Uri("https://localhost:44340/api/jobcategory/"));
         }
 
         public static async Task Main(string[] args)
@@ -23,7 +26,7 @@ namespace BethanysPieShopHRM.App
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("app");
 
-            await registerServices(builder);
+            registerServices(builder.Services);
 
             await builder.Build().RunAsync();
         }
