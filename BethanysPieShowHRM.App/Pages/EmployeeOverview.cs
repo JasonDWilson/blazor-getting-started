@@ -1,4 +1,5 @@
-﻿using BethanysPieShopHRM.App.Services;
+﻿using BethanysPieShopHRM.App.Components;
+using BethanysPieShopHRM.App.Services;
 using BethanysPieShopHRM.Shared;
 using Microsoft.AspNetCore.Components;
 using System;
@@ -18,6 +19,19 @@ namespace BethanysPieShopHRM.App.Pages
         private List<JobCategory> JobCategories { get; set; }
 
         protected async override Task OnInitializedAsync() { Employees = await _employeeDataService.GetAllEmployees(); }
+
+        protected AddEmployeeDialog AddEmployeeDialog { get; set; }
+
+        public async Task HandleNewEmployeeAdded()
+        {
+            await OnInitializedAsync();
+            //StateHasChanged();
+        }
+
+        public void QuickAddEmployee()
+        {
+            AddEmployeeDialog.Show();
+        }
 
         public IEnumerable<Employee> Employees { get; set; }
     }
