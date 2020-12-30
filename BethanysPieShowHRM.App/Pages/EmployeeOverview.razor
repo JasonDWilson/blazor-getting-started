@@ -21,7 +21,14 @@ else
             @foreach (var employee in Employees)
             {
             <tr>
-                <td><img src="@($"https://gillcleerenpluralsight.blob.core.windows.net/person/{employee.EmployeeId}-small.jpg")" class="rounded-circle" /></td>
+                @if (string.IsNullOrWhiteSpace(employee.ImageName))
+                {
+                    <td><img src="@($"https://gillcleerenpluralsight.blob.core.windows.net/person/{employee.EmployeeId}-small.jpg")" class="rounded-circle" /></td>
+                }
+                else
+                {
+                    <td><img src="@employee.ImageName" width="30" class="rounded-circle" /></td>
+                }
                 <td>@employee.EmployeeId</td>
                 <td>@employee.FirstName</td>
                 <td>@employee.LastName</td>
