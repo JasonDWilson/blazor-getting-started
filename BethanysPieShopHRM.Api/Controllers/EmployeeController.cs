@@ -1,6 +1,10 @@
 ﻿using BethanysPieShopHRM.Api.Models;
 using BethanysPieShopHRM.Shared;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.IO;
 
 namespace BethanysPieShopHRM.Api.Controllers
 {
@@ -9,10 +13,18 @@ namespace BethanysPieShopHRM.Api.Controllers
     public class EmployeeController : Controller
     {
         private readonly IEmployeeRepository _employeeRepository;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public EmployeeController(IEmployeeRepository employeeRepository)
+        public EmployeeController(
+            IEmployeeRepository employeeRepository,
+            IWebHostEnvironment webHostEnvironment,
+            IHttpContextAccessor httpContextAccessor
+        )
         {
-            _employeeRepository = employeeRepository;
+            _employeeRepository = employeeRepository ?? throw new ArgumentNullException(nameof(employeeRepository));
+            _webHostEnvironment = webHostEnvironment ?? throw new ArgumentNullException(nameof(webHostEnvironment));
+            _httpContextAccessor = httpContextAccessor ?? throw new ArgumentNullException(nameof(httpContextAccessor));
         }
 
         [HttpPost]
@@ -28,6 +40,18 @@ namespace BethanysPieShopHRM.Api.Controllers
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            // save image
+            if (!string.IsNullOrWhiteSpace(employee.ImageName) && employee.ImageContent != null && employee.ImageContent.Length > 0)
+            {
+                string currentUrl = _httpContextAccessor.HttpContext.Request.Host.Value;
+                var path = $"{_webHostEnvironment.WebRootPath}\\uploads\\{employee.ImageName}";
+                var fileStream = System.IO.File.Create(path);
+                fileStream.Write(employee.ImageContent, 0, employee.ImageContent.Length);
+                fileStream.Close();
+                employee.ImageName = $"https://{currentUrl}/uploads/{employee.ImageName}";
+            }
+
 
             var createdEmployee = _employeeRepository.AddEmployee(employee);
 
@@ -64,6 +88,14 @@ namespace BethanysPieShopHRM.Api.Controllers
             else
                 return NotFound();
         }
+
+        [HttpGet("long")]
+        public IActionResult GetLongEmployeeList() =>
+            Ok(_employeeRepository.GetLongEmployeeList());
+
+        [HttpGet("long/{startIndex}/{count}")]
+        public IActionResult GetLongEmployeeList(int startIndex, int count) =>
+            Ok(_employeeRepository.GetLongEmployeeList(startIndex, count));
 
         [HttpPut]
         public IActionResult UpdateEmployee([FromBody] Employee employee)

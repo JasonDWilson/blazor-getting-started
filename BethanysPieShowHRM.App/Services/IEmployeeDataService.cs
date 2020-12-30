@@ -12,6 +12,8 @@ namespace BethanysPieShopHRM.App.Services
         Task DeleteEmployee(int employeeId);
         Task<IEnumerable<Employee>> GetAllEmployees();
         Task<Employee> GetEmployeeDetails(int employeeId);
+        Task<IEnumerable<Employee>> GetLongEmployeeList();
+        Task<IEnumerable<Employee>> GetLongEmployeeList(int startIndex, int count);
         Task UpdateEmployee(Employee employee);
     }
 }

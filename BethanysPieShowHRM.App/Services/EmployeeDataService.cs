@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -13,10 +14,7 @@ namespace BethanysPieShopHRM.App.Services
     {
         private readonly HttpClient _httpClient;
 
-        public EmployeeDataService(HttpClient httpClient)
-        {
-            _httpClient = httpClient;
-        }
+        public EmployeeDataService(HttpClient httpClient) { _httpClient = httpClient; }
 
         public async Task<Employee> AddEmployee(Employee employee)
         {
@@ -34,21 +32,27 @@ namespace BethanysPieShopHRM.App.Services
         }
 
         public async Task DeleteEmployee(int employeeId)
-        {
-            await _httpClient.DeleteAsync($"api/employee/{employeeId}");
-        }
+        { await _httpClient.DeleteAsync($"api/employee/{employeeId}"); }
 
         public async Task<IEnumerable<Employee>> GetAllEmployees()
         {
-            return await JsonSerializer.DeserializeAsync<IEnumerable<Employee>>
-                    (await _httpClient.GetStreamAsync($"api/employee"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            return await JsonSerializer.DeserializeAsync<IEnumerable<Employee>>(
+                await _httpClient.GetStreamAsync($"api/employee"),
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
 
         public async Task<Employee> GetEmployeeDetails(int employeeId)
         {
-            return await JsonSerializer.DeserializeAsync<Employee>
-                (await _httpClient.GetStreamAsync($"api/employee/{employeeId}"), new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
+            return await JsonSerializer.DeserializeAsync<Employee>(
+                await _httpClient.GetStreamAsync($"api/employee/{employeeId}"),
+                new JsonSerializerOptions() { PropertyNameCaseInsensitive = true });
         }
+
+        public async Task<IEnumerable<Employee>> GetLongEmployeeList() => await _httpClient.GetFromJsonAsync<IEnumerable<Employee>>(
+            $"api/employee/long");
+
+        public async Task<IEnumerable<Employee>> GetLongEmployeeList(int startIndex, int count) => await _httpClient.GetFromJsonAsync<IEnumerable<Employee>>(
+            $"api/employee/long/{startIndex}/{count}");
 
         public async Task UpdateEmployee(Employee employee)
         {
@@ -57,7 +61,5 @@ namespace BethanysPieShopHRM.App.Services
 
             await _httpClient.PutAsync("api/employee", employeeJson);
         }
-
-
     }
 }
