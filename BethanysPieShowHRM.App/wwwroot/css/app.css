@@ -229,3 +229,9 @@ nav {
         right: 0.75rem;
         top: 0.5rem;
     }
+
+    .virtualized{
+        overflow:auto;
+        width:100%;
+        height:600px;
+    }

@@ -89,6 +89,14 @@ namespace BethanysPieShopHRM.Api.Controllers
                 return NotFound();
         }
 
+        [HttpGet("long")]
+        public IActionResult GetLongEmployeeList() =>
+            Ok(_employeeRepository.GetLongEmployeeList());
+
+        [HttpGet("long/{startIndex}/{count}")]
+        public IActionResult GetLongEmployeeList(int startIndex, int count) =>
+            Ok(_employeeRepository.GetLongEmployeeList(startIndex, count));
+
         [HttpPut]
         public IActionResult UpdateEmployee([FromBody] Employee employee)
         {

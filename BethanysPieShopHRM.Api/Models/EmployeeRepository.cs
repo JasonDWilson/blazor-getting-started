@@ -1,27 +1,19 @@
-﻿using System.Collections.Generic;
+﻿using BethanysPieShopHRM.Shared;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using BethanysPieShopHRM.Shared;
 
 namespace BethanysPieShopHRM.Api.Models
 {
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly AppDbContext _appDbContext;
+        private Random random = new Random();
 
-        public EmployeeRepository(AppDbContext appDbContext)
-        {
-            _appDbContext = appDbContext;
-        }
+        public EmployeeRepository(AppDbContext appDbContext) { _appDbContext = appDbContext; }
 
-        public IEnumerable<Employee> GetAllEmployees()
-        {
-            return _appDbContext.Employees;
-        }
-
-        public Employee GetEmployeeById(int employeeId)
-        {
-            return _appDbContext.Employees.FirstOrDefault(c => c.EmployeeId == employeeId);
-        }
+        private string RandomString(int length) => new string(
+            Enumerable.Repeat("ABCDEFGHIJKLMNOPQRSTUVWXYZ", length).Select(x => x[random.Next(x.Length)]).ToArray());
 
         public Employee AddEmployee(Employee employee)
         {
@@ -29,6 +21,36 @@ namespace BethanysPieShopHRM.Api.Models
             _appDbContext.SaveChanges();
             return addedEntity.Entity;
         }
+
+        public void DeleteEmployee(int employeeId)
+        {
+            var foundEmployee = _appDbContext.Employees.FirstOrDefault(e => e.EmployeeId == employeeId);
+            if (foundEmployee == null)
+                return;
+
+            _appDbContext.Employees.Remove(foundEmployee);
+            _appDbContext.SaveChanges();
+        }
+
+        public IEnumerable<Employee> GetAllEmployees() { return _appDbContext.Employees; }
+
+        public Employee GetEmployeeById(int employeeId)
+        { return _appDbContext.Employees.FirstOrDefault(c => c.EmployeeId == employeeId); }
+
+        public IEnumerable<Employee> GetLongEmployeeList()
+        {
+            var employees = new List<Employee>();
+            for (int i = 0; i < 1000; i++)
+                employees.Add(
+                    new Employee { EmployeeId = i, FirstName = RandomString(10), LastName = RandomString(18) });
+            return employees;
+        }
+
+
+        public IEnumerable<Employee> GetLongEmployeeList(int startIndex, int count) => GetLongEmployeeList()
+            .Skip(startIndex)
+            .Take(count)
+            .ToList();
 
         public Employee UpdateEmployee(Employee employee)
         {
@@ -59,15 +81,6 @@ namespace BethanysPieShopHRM.Api.Models
             }
 
             return null;
-        }
-
-        public void DeleteEmployee(int employeeId)
-        {
-            var foundEmployee = _appDbContext.Employees.FirstOrDefault(e => e.EmployeeId == employeeId);
-            if (foundEmployee == null) return;
-
-            _appDbContext.Employees.Remove(foundEmployee);
-            _appDbContext.SaveChanges();
         }
     }
 }
