@@ -12,7 +12,7 @@ namespace BethanysPieShopHRM.App.Pages
 {
     public partial class EmployeeEdit
     {
-
+        private ElementReference LastNameInput;
         private IReadOnlyList<IBrowserFile> selectedFiles;
 
         protected string CountryId = string.Empty;
@@ -87,6 +87,8 @@ namespace BethanysPieShopHRM.App.Pages
         {
             NavigationManager.NavigateTo("/employeeoverview");
         }
+
+        protected async override Task OnAfterRenderAsync(bool firstRender) => await LastNameInput.FocusAsync();
 
         protected override async Task OnInitializedAsync()
         {
